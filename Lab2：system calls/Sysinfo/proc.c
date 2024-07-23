@@ -267,7 +267,7 @@ growproc(int n)
   return 0;
 }
 
-// 返回进程状态为UNUSED的进程数量
+// 返回进程状态不为UNUSED的进程数量
 int
 get_nproc(void)
 {
