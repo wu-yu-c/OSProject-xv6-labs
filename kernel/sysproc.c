@@ -101,9 +101,9 @@ uint64
 sys_sigreturn(void)
 {
   struct proc* p = myproc();
+  memmove(p->trapframe,p->temp,sizeof(struct trapframe));
   p->temp = 0;
   p->clock_num = 0;
-  memmove(p->trapframe,p->temp,sizeof(struct trapframe));
   return 0;
 }
 
