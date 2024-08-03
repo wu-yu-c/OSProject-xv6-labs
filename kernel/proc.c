@@ -267,6 +267,22 @@ growproc(int n)
   return 0;
 }
 
+// 返回进程状态不为UNUSED的进程数量
+int
+get_nproc(void)
+{
+  struct proc *p;
+  int count = 0;
+  for (p = proc; p < &proc[NPROC]; p++)
+  {
+    acquire(&p->lock);
+    if (p->state != UNUSED)
+      count++;
+    release(&p->lock);
+  }
+  return count;
+}
+
 // Create a new process, copying the parent.
 // Sets up child kernel stack to return as if from fork() system call.
 int
