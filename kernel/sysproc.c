@@ -95,3 +95,36 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_trace(void)
+{
+  int n;
+  // 取a0寄存器中的内容到变量n
+  if(argint(0,&n)<0)
+    return -1;
+  //将n的值传给现有进程的mask
+  myproc()->mask=n;
+  return 0;
+}
+
+// add header
+#include "sysinfo.h"
+
+uint64
+sys_sysinfo(void)
+{
+  uint64 addr;
+  struct sysinfo info;
+  struct proc *p = myproc();
+  //获取用户态sysinfo指针地址
+  if (argaddr(0, &addr) < 0)
+	  return -1;
+  info.freemem = get_freemem();
+  info.nproc = get_nproc();
+  //复制结构体sysinfo返回用户空间
+  if (copyout(p->pagetable, addr, (char *)&info, sizeof(info)) < 0)
+    return -1;
+  
+  return 0;
+}
